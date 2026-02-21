@@ -1,0 +1,15 @@
+services:
+  twitch-loop:
+    image: jrottenberg/ffmpeg:6.1-nvidia
+    container_name: estil
+    gpus: all
+    environment:
+      - NVIDIA_VISIBLE_DEVICES=all
+      - NVIDIA_DRIVER_CAPABILITIES=compute,video,utility
+      - TWITCH_STREAM_KEY=${TWITCH_STREAM_KEY}
+      - TWITCH_RTMP=rtmp://live.twitch.tv/app
+    volumes:
+      - ./media:/media:ro
+      - ./stream.sh:/stream.sh:ro
+    restart: unless-stopped
+    entrypoint: ["/bin/sh", "/stream.sh"]
